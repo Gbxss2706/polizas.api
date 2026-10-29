@@ -54,4 +54,12 @@ public class Riesgo {
     public void setEstadoRiesgo(EstadoRiesgo estadoRiesgo) {
         this.estadoRiesgo = estadoRiesgo;
     }
+
+    public Poliza getPoliza() {
+        return poliza;
+    }
+
+    public void setPoliza(Poliza poliza) {
+        this.poliza = poliza;
+    }
 }
