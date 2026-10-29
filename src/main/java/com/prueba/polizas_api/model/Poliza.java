@@ -2,6 +2,8 @@ package com.prueba.polizas_api.model;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Date;
 
 @Entity
@@ -32,6 +34,9 @@ public class Poliza {
 
     @Enumerated(EnumType.STRING)
     private TipoPoliza tipoPoliza;
+
+    @OneToMany(mappedBy = "poliza", cascade = CascadeType.ALL)
+    private List<Riesgo> riesgos = new ArrayList<Riesgo>();
 
     public Long getId() {
         return id;

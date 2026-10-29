@@ -19,6 +19,10 @@ public class Riesgo {
     @Enumerated(EnumType.STRING)
     private EstadoRiesgo estadoRiesgo;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "poliza_id", nullable = false)
+    private Poliza poliza;
+
     public Long getId() {
         return id;
     }
