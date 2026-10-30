@@ -2,23 +2,71 @@ package com.prueba.polizas_api.service;
 
 import com.prueba.polizas_api.dto.RiesgoRequest;
 import com.prueba.polizas_api.dto.RiesgoResponse;
+import com.prueba.polizas_api.exception.BusinessRuleException;
+import com.prueba.polizas_api.exception.ResourceNotFoundException;
+import com.prueba.polizas_api.model.*;
+import com.prueba.polizas_api.repository.IPolizaRepository;
+import com.prueba.polizas_api.repository.IRiesgoRepository;
 
 import java.util.List;
 
 public class RiesgoService implements IRiesgoService{
 
+    private final IRiesgoRepository riesgoRepository;
+    private final IPolizaRepository polizaRepository;
+
+    public RiesgoService(IRiesgoRepository riesgoRepository, IPolizaRepository polizaRepository) {
+        this.riesgoRepository = riesgoRepository;
+        this.polizaRepository = polizaRepository;
+    }
+
     @Override
     public List<RiesgoResponse> listarPorPoliza(Long polizaId) {
-        return List.of();
+        buscarPoliza(polizaId);
+        return riesgoRepository.findByPolizaId(polizaId).stream()
+                .map(RiesgoResponse::from).toList();
     }
 
     @Override
     public RiesgoResponse agregar(Long polizaId, RiesgoRequest request) {
-        return null;
+        Poliza poliza = buscarPoliza(polizaId);
+        if (poliza.getTipoPoliza() != TipoPoliza.COLECTIVA) {
+            throw new BusinessRuleException(
+                    "Solo se pueden agregar riesgos a pólizas colectivas");
+        }
+        if (poliza.getEstadoPoliza() == EstadoPoliza.INACTIVO) {
+            throw new BusinessRuleException("No se pueden agregar riesgos a una póliza inactiva");
+        }
+
+        Riesgo riesgo = new Riesgo();
+        riesgo.setDireccionInmueble(request.getDireccionInmueble());
+        riesgo.setNombreArrendatario(request.getNombreArrendatario());
+        riesgo.setEstadoRiesgo(EstadoRiesgo.ACTIVO);
+        poliza.agregarRiesgo(riesgo);
+
+        Riesgo guardado = riesgoRepository.save(riesgo);
+
+        return RiesgoResponse.from(guardado);
     }
 
     @Override
     public RiesgoResponse cancelar(Long riesgoId) {
-        return null;
+        Riesgo riesgo = riesgoRepository.findById(riesgoId)
+                .orElseThrow(() -> new ResourceNotFoundException("No existe el riesgo " + riesgoId));
+
+        if(riesgo.getEstadoRiesgo() != EstadoRiesgo.CANCELADO) {
+            riesgo.setEstadoRiesgo(EstadoRiesgo.CANCELADO);
+        }else{
+            throw new BusinessRuleException("No se puede cancelar el riesgo");
+        }
+
+        Riesgo guardado = riesgoRepository.save(riesgo);
+
+        return RiesgoResponse.from(guardado);
+    }
+
+    private Poliza buscarPoliza(Long id) {
+        return polizaRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("No existe la póliza " + id));
     }
 }

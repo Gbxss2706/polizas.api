@@ -38,6 +38,11 @@ public class Poliza {
     @OneToMany(mappedBy = "poliza", cascade = CascadeType.ALL)
     private List<Riesgo> riesgos = new ArrayList<Riesgo>();
 
+    public void agregarRiesgo(Riesgo riesgo) {
+        riesgos.add(riesgo);
+        riesgo.setPoliza(this);
+    }
+
     public Long getId() {
         return id;
     }
