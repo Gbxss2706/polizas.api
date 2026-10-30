@@ -23,4 +23,24 @@ public class RiesgoResponse {
         dto.polizaId = r.getPoliza().getId();
         return dto;
     }
+
+    public String getDireccionInmueble() {
+        return direccionInmueble;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getArrendatario() {
+        return arrendatario;
+    }
+
+    public EstadoRiesgo getEstado() {
+        return estado;
+    }
+
+    public Long getPolizaId() {
+        return polizaId;
+    }
 }
