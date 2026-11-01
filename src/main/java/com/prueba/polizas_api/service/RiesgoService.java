@@ -7,6 +7,7 @@ import com.prueba.polizas_api.exception.ResourceNotFoundException;
 import com.prueba.polizas_api.model.*;
 import com.prueba.polizas_api.repository.IPolizaRepository;
 import com.prueba.polizas_api.repository.IRiesgoRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -21,6 +22,7 @@ public class RiesgoService implements IRiesgoService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<RiesgoResponse> listarPorPoliza(Long polizaId) {
         buscarPoliza(polizaId);
         return riesgoRepository.findByPolizaId(polizaId).stream()

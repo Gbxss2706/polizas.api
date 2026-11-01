@@ -106,4 +106,8 @@ public class Poliza {
     public void setTipoPoliza(TipoPoliza tipoPoliza) {
         this.tipoPoliza = tipoPoliza;
     }
+
+    public List<Riesgo> getRiesgos() {
+        return riesgos;
+    }
 }
