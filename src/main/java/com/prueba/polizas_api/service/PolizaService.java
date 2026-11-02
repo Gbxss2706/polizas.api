@@ -8,10 +8,12 @@ import com.prueba.polizas_api.model.EstadoRiesgo;
 import com.prueba.polizas_api.model.Poliza;
 import com.prueba.polizas_api.model.TipoPoliza;
 import com.prueba.polizas_api.repository.IPolizaRepository;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Service
 public class PolizaService implements IPolizaService {
 
     private final IPolizaRepository polizaRepository;

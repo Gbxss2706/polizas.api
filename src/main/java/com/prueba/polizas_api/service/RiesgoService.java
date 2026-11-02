@@ -7,10 +7,12 @@ import com.prueba.polizas_api.exception.ResourceNotFoundException;
 import com.prueba.polizas_api.model.*;
 import com.prueba.polizas_api.repository.IPolizaRepository;
 import com.prueba.polizas_api.repository.IRiesgoRepository;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Service
 public class RiesgoService implements IRiesgoService{
 
     private final IRiesgoRepository riesgoRepository;
