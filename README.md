@@ -95,3 +95,10 @@ Toda operación que modifique el estado de las entidades notifica de manera sín
 * **IPC:** Se aplica un porcentaje de IPC fijo del **5,2 %** para las renovaciones.
 * **Cancelación Individual:** Si se cancela el único riesgo existente en una póliza individual, la póliza se cancelará automáticamente.
 * **Creación de Pólizas:** La funcionalidad de crear nuevas pólizas queda fuera del alcance actual; todas se inicializan mediante el script `data.sql`.
+---
+
+## TESTS
+
+En la carpeta postman se encuentran los tests realizados en formato JSON listos para importar en postman
+
+---
