@@ -17,4 +17,12 @@ public class EventoCoreRequest {
     public Long getPolizaId() {
         return polizaId;
     }
+
+    public void setEvento(String evento) {
+        this.evento = evento;
+    }
+
+    public void setPolizaId(Long polizaId) {
+        this.polizaId = polizaId;
+    }
 }
