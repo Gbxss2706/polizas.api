@@ -1,5 +1,6 @@
 package com.prueba.polizas_api.service;
 
+import com.prueba.polizas_api.core.ICoreClient;
 import com.prueba.polizas_api.dto.RiesgoRequest;
 import com.prueba.polizas_api.dto.RiesgoResponse;
 import com.prueba.polizas_api.exception.BusinessRuleException;
@@ -17,10 +18,12 @@ public class RiesgoService implements IRiesgoService{
 
     private final IRiesgoRepository riesgoRepository;
     private final IPolizaRepository polizaRepository;
+    private final ICoreClient coreClient;
 
-    public RiesgoService(IRiesgoRepository riesgoRepository, IPolizaRepository polizaRepository) {
+    public RiesgoService(IRiesgoRepository riesgoRepository, IPolizaRepository polizaRepository, ICoreClient coreClient) {
         this.riesgoRepository = riesgoRepository;
         this.polizaRepository = polizaRepository;
+        this.coreClient = coreClient;
     }
 
     @Override
@@ -49,6 +52,7 @@ public class RiesgoService implements IRiesgoService{
         poliza.agregarRiesgo(riesgo);
 
         Riesgo guardado = riesgoRepository.save(riesgo);
+        coreClient.notificarActualizacion(polizaId, "Riesgo " + guardado.getId() + " agregado");
 
         return RiesgoResponse.from(guardado);
     }
@@ -65,6 +69,7 @@ public class RiesgoService implements IRiesgoService{
         }
 
         Riesgo guardado = riesgoRepository.save(riesgo);
+        coreClient.notificarActualizacion(riesgoId, "Riesgo " + riesgoId + " cancelado");
 
         return RiesgoResponse.from(guardado);
     }

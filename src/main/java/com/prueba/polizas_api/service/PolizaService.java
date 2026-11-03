@@ -1,5 +1,6 @@
 package com.prueba.polizas_api.service;
 
+import com.prueba.polizas_api.core.ICoreClient;
 import com.prueba.polizas_api.dto.PolizaResponse;
 import com.prueba.polizas_api.exception.BusinessRuleException;
 import com.prueba.polizas_api.exception.ResourceNotFoundException;
@@ -18,9 +19,11 @@ public class PolizaService implements IPolizaService {
 
     private final IPolizaRepository polizaRepository;
     private static final double IPC = 0.052;
+    private final ICoreClient coreClient;
 
-    public PolizaService(IPolizaRepository polizaRepository) {
+    public PolizaService(IPolizaRepository polizaRepository, ICoreClient coreClient) {
         this.polizaRepository = polizaRepository;
+        this.coreClient = coreClient;
     }
 
     @Override
@@ -53,6 +56,8 @@ public class PolizaService implements IPolizaService {
         poliza.setPrimaMensual(nuevoCanon * poliza.getVigenciaMensual());
         poliza.setEstadoPoliza(EstadoPoliza.RENOVADO);
 
+        coreClient.notificarActualizacion(polizaId, "Póliza renovada. Nuevo canon: " + nuevoCanon);
+
         return PolizaResponse.from(poliza);
     }
 
@@ -66,6 +71,7 @@ public class PolizaService implements IPolizaService {
         poliza.setEstadoPoliza(EstadoPoliza.INACTIVO);
         poliza.getRiesgos().forEach(r -> r.setEstadoRiesgo(EstadoRiesgo.CANCELADO));
 
+        coreClient.notificarActualizacion(polizaId, "Póliza cancelada junto con sus riesgos");
         return PolizaResponse.from(poliza);
     }
 
